@@ -145,4 +145,4 @@ def longest_strictly_increasing_subsequence(self, nums):
     for num in nums:
         head, max_left=head.add_node(num)
         # head.print_top_tree()
-return head.max_val()
+    return head.max_val()
