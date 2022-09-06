@@ -1,4 +1,4 @@
-def longest_strictly_increasing_subsequence(self, nums):
+def longest_strictly_increasing_subsequence(nums):
     # node_lst=[]
     class node():
         def __init__(self, val=None, ct=1, left=None, right=None, height=1):
