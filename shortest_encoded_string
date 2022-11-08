@@ -1,0 +1,90 @@
+def getLengthOfOptimalCompression(s: str, k: int) -> int:
+    def cl(l0, k):
+        if k>=l0:
+            return 0, {(0, "", 0)}
+        if not k:
+            ct=1
+            while ct<=l0 and s[l0-ct]==s[l0-1]:
+                ct+=1
+            el=encoded_len(s[:l0])
+            return el, {(el, s[l0-1], ct-1)}
+        l1, min_lst1=table[k-1]
+        l2, min_lst2=table[k]
+        end_char=s[l0-1]
+        lans=l1
+        for l, min_ending, min_ct in min_lst2:
+            if min_ending==end_char and min_ct not in[1, 9, 99]:
+                if l<lans:
+                    lans=l
+            else:
+                if l+1<lans:
+                    lans=l+1
+        min_lstans={it for it in min_lst1 if it[0]<=lans+1}
+        for l, min_ending, min_ct in min_lst2:
+            if min_ending==end_char:
+                if min_ct in [1, 9, 99]:
+                    l+=1
+                min_ct+=1
+            else:
+                l+=1
+                min_ct=1
+            if l<=lans+1:
+                min_lstans.add((l, s[l0-1], min_ct))
+        return lans, min_lstans
+
+    def cl2(l0, k):
+        if k>=l0:
+            ct=1
+            return 0, {(0, "", 0)}
+        if not k:
+            ct=1
+            while ct<=l0 and s[l0-ct]==s[l0-1]:
+                ct+=1
+            el=encoded_len(s[:l0])
+            return el, {(el, s[l0-1], ct-1)}
+        l1, min_lst1=table[k-1]
+        l2, min_lst2=table[k]
+        end_char=s[l0-1]
+        lans=l1
+        for l, min_ending, min_ct in min_lst2:
+            if min_ending==end_char and min_ct not in[1, 9, 99]:
+                if l<lans:
+                    lans=l
+            else:
+                if l+1<lans:
+                    lans=l+1
+        min_lstans={it for it in min_lst1 if it[0]<=lans+2}
+        for l, min_ending, min_ct in min_lst2:
+            if min_ending==end_char:
+                if min_ct in [1, 9, 99]:
+                    l+=1
+                min_ct+=1
+            else:
+                l+=1
+                min_ct=1
+            if l<=lans+2:
+                min_lstans.add((l, s[l0-1], min_ct))
+        return lans, min_lstans
+
+    def encoded_len(s):
+        l=len(s)
+        ans=0
+        i=0
+        while i<l:
+            ct=0
+            c0=s[i]
+            while i<l and s[i]==c0:
+                i+=1
+                ct+=1
+            ans+=((4 if ct==100 else 3) if ct>=10 else 2) if ct>=2 else 1
+        return ans
+
+    l0=len(s)
+    if l0<50:
+        for i in range(1, l0+1):
+            table=[cl(i, j) for j in range(k+1)]
+    else:
+        for i in range(1, l0+1):
+            table=[cl2(i, j) for j in range(k+1)]
+
+    return table[k][0]
